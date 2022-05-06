@@ -1,6 +1,13 @@
 package application;
 
 public class Zone {
+    int id;
+    String codGeo;
+    String Nome;
+    int fk_medidorZona;
+    double totalCond;
+    double populacao;
+
     public int getId() {
         return id;
     }
@@ -33,26 +40,20 @@ public class Zone {
         this.fk_medidorZona = fk_medidorZona;
     }
 
-    public float getTotalCond() {
+    public double getTotalCond() {
         return totalCond;
     }
 
-    public void setTotalCond(float totalCond) {
+    public void setTotalCond(double totalCond) {
         this.totalCond = totalCond;
     }
 
-    public float getPopulacao() {
+    public double getPopulacao() {
         return populacao;
     }
 
-    public void setPopulacao(float populacao) {
+    public void setPopulacao(double populacao) {
         this.populacao = populacao;
     }
 
-    int id;
-    String codGeo;
-    String Nome;
-    int fk_medidorZona;
-    float totalCond;
-    float populacao;
 }

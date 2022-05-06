@@ -20,5 +20,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="javaee-16" level="application" />
+    <orderEntry type="library" exported="" name="postgresql-42.3.3" level="project" />
+    <orderEntry type="library" exported="" name="common-lang3" level="project" />
   </component>
 </module>

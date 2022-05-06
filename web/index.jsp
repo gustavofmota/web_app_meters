@@ -6,69 +6,93 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page language="java" import="java.sql.*"%>
-<%@ page language="java" import="application.ConnectionDB.*"%>
-<%@ page import="application.ConnectionDB" %>
-<%@ page import="application.zoneManager" %>
-<%@ page import="application.Zone"%>
-<%@ page import="java.util.ArrayList" %>
+<%@ page language="java" import="application.ConnectionDB" %>
+<%@ page language="java" import="application.Zone" %>
+<%@ page import="application.ZoneManager" %>
+<%@ page import="" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
 
 
 <%
-  // out JspWriter
-  request.getParameter("id"); // HttpServletRequest
-  //response; // HttpServletResponse
+    // out JspWriter
+    request.getParameter("id"); // HttpServletRequest
+    //response; // HttpServletResponse
+    Class<?> aClass = Class.forName("org.postgresql.Driver");
 
-  request.getSession().setAttribute("teste", "abc");
+    ConnectionDB connection = (ConnectionDB) request.getSession().getAttribute("connection");
+if(connection == null){
+    connection =  new ConnectionDB();
+    request.getSession().setAttribute("connection",connection);
+}
 
-  ConnectionDB conn = new ConnectionDB();
-  Connection cnn = conn.getConnectX();
 
-  List<Zone> zones = new ArrayList<>();
+    ConnectionDB conn = connection;
 
+    List<Zone> zones = ZoneManager.getZones(conn);
 %>
 <html>
 
-<style>
-  table, th, td {
-    border:1px solid black;
-  }
-</style>
+<head>
 
-  <head>
-    <title>blabla</title>
-  </head>
-  <body>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/myStyle.css">
 
-  <%= "yes!"+System.currentTimeMillis() %>
+    <title>Web App Zones & Meters</title>
+</head>
+<body>
 
-  <p>Zones</p><hr>
+<header>
+    <h1>Web App Zones & Meters</h1>
+    <div class="right">
+        <h1>Beta Version</h1>
+    </div>
+</header>
 
-  <table style="width:100%">
+<div class="zonesHeader">
+    <h2>Zones</h2>
+</div>
 
-   <thead>
-    <tr >
-      <th > Código Geográfico</th >
-      <th > Nome da Zona</th >
-      <th > teste </th >
-    </tr >
-   </thead>
-    <%for(int i=0;i<=zones.size();++i){
-        Zone iter = zones.get(i);
-    }
+<div class="main">
+    <% for (Zone z : zones) {%>
+    <div class="myBox">
+        <a href="meters.jsp?id=<%=z.getId()%>">
+        <div class="boxHeader">
+            <p><%=StringEscapeUtils.escapeHtml4(z.getNome())%>
+            </p>
+            <div class="leftBtn">
+                <button class="button-4" role="button">Editar</button>
+                <button class="button-4" role="button">Eliminar</button>
+            </div>
+        </div>
 
-    %>
-   <tr>
-     <td><%=Z%></td>
-     <td>TESTE</td>
-     <td>TESTE</td>
-   </tr>
+        <div class="boxBody">
 
+            <table>
+                <tr>
+                    <td>Código Geográfico: <a class="light"><%=StringEscapeUtils.escapeHtml4(z.getCodGeo())%>
+                    </a></td>
+                </tr>
 
+                <tr>
+                    <td>Comprimento das Condutas: <a class="light"><%=(z.getTotalCond())%>
+                    </a></td>
+                </tr>
 
-  </table>
+                <tr>
+                    <td>População: <a class="light"><%=z.getPopulacao()%>
+                    </a></td>
+                </tr>
+            </table>
 
+        </div>
+        </a>
+    </div>
+    <%}%>
+</div>
 
-  </body>
+<footer>
+    <h6>© Developed by Gustavo Mota 2022 ©</h6>
+</footer>
+</body>
 </html>
