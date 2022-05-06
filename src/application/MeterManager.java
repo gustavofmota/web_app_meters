@@ -31,12 +31,15 @@ public class MeterManager {
                 meter.setTipoMedidor(resultSet.getInt("tipomedidor"));
 
                 metersList.add(meter);
-                zId = -1;
             }
 
 
             return metersList;
         }
+
+    }
+
+    public void  deleteMeter(ConnectionDB conn, int mId){
 
     }
 

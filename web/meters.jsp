@@ -13,8 +13,10 @@
     ConnectionDB conn = (ConnectionDB) request.getSession().getAttribute("connection");
 
     int zId = Integer.parseInt(request.getParameter("id"));
+    //int mId = Integer.parseInt(request.getParameter("mId"));
 
     List<Meter> meters = MeterManager.getMeters(conn, zId);
+
 
 %>
 
@@ -25,13 +27,9 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/myStyle_meters.css">
 
-    <title>Web App Zones & Meters</title>
+    <title>Web App Zones & Meters - Meters</title>
 </head>
 <body>
-
-<%
-
-%>
 
 <header>
     <h1>Web App Zones & Meters</h1>
@@ -41,46 +39,53 @@
 </header>
 
 <div class="zonesHeader">
-    <h2>Zones</h2>
+    <h2>Meters</h2>
 </div>
 
 <div class="main">
+
+    <a href="MeterForm.jsp?id=<%=zId%>">
+        <div class="mybox click ">
+            <p class="light">+</p>
+        </div>
+    </a>
+
     <%for (Meter m : meters) {%>
     <div class="myBox">
-            <div class="boxHeader">
-                <p><%=m.getNomeMedidor()%>
-                </p>
-                <div class="leftBtn">
-                    <button class="button-4" role="button">Editar</button>
-                    <button class="button-4" role="button">Eliminar</button>
-                </div>
+        <div class="boxHeader">
+            <p><%=m.getNomeMedidor()%>
+            </p>
+            <div class="leftBtn">
+                <button class="button-4" role="button">Editar</button>
+                <button type="submit" class="button-4" role="button" name="mId" value="<%=m.getId()%>">Eliminar</button>
             </div>
+        </div>
 
-            <div class="boxBody">
+        <div class="boxBody">
 
-                <table>
-                    <tr>
-                        <td>Código do Medidor: <a class="light"><%=m.getCodMedidor()%>
-                        </a></td>
-                    </tr>
+            <table>
+                <tr>
+                    <td>Código do Medidor: <a class="light"><%=m.getCodMedidor()%>
+                    </a></td>
+                </tr>
 
-                    <tr>
-                        <td>Supply By: <a class="light"><%=m.getSuply_by()%>
-                        </a></td>
-                    </tr>
+                <tr>
+                    <td>Supply By: <a class="light"><%=m.getSuply_by()%>
+                    </a></td>
+                </tr>
 
-                    <tr>
-                        <td>Código das Unidades: <a class="light"><%=m.getCodUni()%>
-                        </a></td>
-                    </tr>
+                <tr>
+                    <td>Código das Unidades: <a class="light"><%=m.getCodUni()%>
+                    </a></td>
+                </tr>
 
-                    <tr>
-                        <td>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%>
-                        </a></td>
-                    </tr>
-                </table>
+                <tr>
+                    <td>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%>
+                    </a></td>
+                </tr>
+            </table>
 
-            </div>
+        </div>
     </div>
     <%}%>
 </div>

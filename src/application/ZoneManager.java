@@ -35,7 +35,8 @@ public class ZoneManager {
         }
     }
 
-
-
+    public void deleteZone(ConnectionDB conn) throws SQLException{
 
     }
+
+}

@@ -59,6 +59,18 @@ footer{
     margin: 1%;
     /*border-radius: 7px;*/
 }
+.click{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: black;
+}
+
+.click > p{
+    opacity: 0.5;
+}
 
 .boxHeader {
     position: relative;
@@ -150,7 +162,7 @@ footer{
 .light{
     font-weight: lighter;
 }
-
 .main div:hover {
     background: lightskyblue;
+
 }

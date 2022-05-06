@@ -38,7 +38,7 @@ if(connection == null){
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/myStyle.css">
 
-    <title>Web App Zones & Meters</title>
+    <title>Web App Zones & Meters - Zones</title>
 </head>
 <body>
 
@@ -54,6 +54,12 @@ if(connection == null){
 </div>
 
 <div class="main">
+    <a href="#">
+        <div class="mybox click ">
+            <p class="light">+</p>
+        </div>
+    </a>
+
     <% for (Zone z : zones) {%>
     <div class="myBox">
         <a href="meters.jsp?id=<%=z.getId()%>">
@@ -62,7 +68,7 @@ if(connection == null){
             </p>
             <div class="leftBtn">
                 <button class="button-4" role="button">Editar</button>
-                <button class="button-4" role="button">Eliminar</button>
+                <button class="button-4" role="button" value="">Eliminar</button>
             </div>
         </div>
 
