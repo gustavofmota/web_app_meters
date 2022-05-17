@@ -12,11 +12,18 @@
 <%
     ConnectionDB conn = (ConnectionDB) request.getSession().getAttribute("connection");
 
-    int zId = Integer.parseInt(request.getParameter("id"));
+    int zId = Integer.parseInt(request.getParameter("zId"));
     //int mId = Integer.parseInt(request.getParameter("mId"));
 
-    List<Meter> meters = MeterManager.getMeters(conn, zId);
+    boolean hasError = request.getParameter("hasError").equals(Boolean.TRUE.toString());
 
+    if(request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
+
+        Meter meter = MeterManager.addMeter(request, conn, zId);
+        hasError = meter == null;
+    }
+
+    List<Meter> meters = MeterManager.getMeters(conn, zId);
 
 %>
 
@@ -44,11 +51,19 @@
 
 <div class="main">
 
-    <a href="MeterForm.jsp?id=<%=zId%>">
+    <a method="post" href="MeterForm.jsp?zId=<%=zId%>">
         <div class="mybox click ">
             <p class="light">+</p>
         </div>
     </a>
+
+    <% if (hasError){ %>
+
+<%--    ADICIONAR POP-UP --%>
+          <p>Something went wrong</p>
+<%--    ADICIONAR POP-UP  --%>
+
+    <% }%>
 
     <%for (Meter m : meters) {%>
     <div class="myBox">
@@ -56,8 +71,8 @@
             <p><%=m.getNomeMedidor()%>
             </p>
             <div class="leftBtn">
-                <button class="button-4" role="button">Editar</button>
-                <button type="submit" class="button-4" role="button" name="mId" value="<%=m.getId()%>">Eliminar</button>
+                <button class="button-4" data-link = "ZoneForm.jsp?mId=<%=m.getId()%>" >Editar</button>
+                <button type="submit" class="button-4" name="mId" value="<%=m.getId()%>">Eliminar</button>
             </div>
         </div>
 
@@ -89,6 +104,10 @@
     </div>
     <%}%>
 </div>
+
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
 
 <footer>
     <h6>© Developed by Gustavo Mota 2022 ©</h6>

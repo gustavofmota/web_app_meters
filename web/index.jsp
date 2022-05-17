@@ -21,13 +21,21 @@
     Class<?> aClass = Class.forName("org.postgresql.Driver");
 
     ConnectionDB connection = (ConnectionDB) request.getSession().getAttribute("connection");
-if(connection == null){
-    connection =  new ConnectionDB();
-    request.getSession().setAttribute("connection",connection);
-}
 
+    if (connection == null) {
+        connection = new ConnectionDB();
+        request.getSession().setAttribute("connection", connection);
+    }
 
     ConnectionDB conn = connection;
+
+    boolean hasError = false;
+
+    if (request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
+
+        Zone zone = ZoneManager.addZone(request, conn);
+        hasError = zone == null;
+    }
 
     List<Zone> zones = ZoneManager.getZones(conn);
 %>
@@ -53,24 +61,33 @@ if(connection == null){
     <h2>Zones</h2>
 </div>
 
-<div class="main">
-    <a href="#">
-        <div class="mybox click ">
+<%--<div class="master">--%>
+<div class="main grid">
+    <div class="mybox click ">
+        <a href="ZoneForm.jsp" id="plus">
             <p class="light">+</p>
-        </div>
-    </a>
+        </a>
+    </div>
+
+    <% if (hasError) { %>
+
+    <%--    ADICIONAR POP-UP --%>
+    <p>Something went wrong</p>
+    <%--    ADICIONAR POP-UP  --%>
+
+    <% }%>
 
     <% for (Zone z : zones) {%>
     <div class="myBox">
-        <a href="meters.jsp?id=<%=z.getId()%>">
-        <div class="boxHeader">
-            <p><%=StringEscapeUtils.escapeHtml4(z.getNome())%>
-            </p>
-            <div class="leftBtn">
-                <button class="button-4" role="button">Editar</button>
-                <button class="button-4" role="button" value="">Eliminar</button>
+        <div class="zoneWrapper" data-zid="<%=z.getId()%>">
+            <div class="boxHeader">
+                <p><%=StringEscapeUtils.escapeHtml4(z.getNome())%>
+                </p>
+                <div class="leftBtn">
+                    <button class="button-4" data-link = "ZoneForm.jsp?zId=<%=z.getId()%>">Editar</button>
+                    <button class="button-4" value="">Eliminar</button>
+                </div>
             </div>
-        </div>
 
         <div class="boxBody">
 
@@ -92,13 +109,19 @@ if(connection == null){
             </table>
 
         </div>
-        </a>
+        </div>
     </div>
     <%}%>
+    <%--    <div class="spacer"></div>--%>
 </div>
+<%--</div>--%>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
 
 <footer>
     <h6>© Developed by Gustavo Mota 2022 ©</h6>
 </footer>
+
 </body>
 </html>

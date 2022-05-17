@@ -1,5 +1,8 @@
 * {
     font-family: 'Product Sans', sans-serif;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 table{
@@ -22,6 +25,11 @@ header{
     position:absolute;
     right: 1%;
 }
+.master{
+    position: relative;
+    overflow-y: auto;
+    height: calc(100% - 130px);
+}
 
 footer{
     width: 100%;
@@ -31,11 +39,12 @@ footer{
     background: cornflowerblue;
     height: 20px;
     font-size: 10px;
+    position: relative;
+    /*position: fixed;
+    bottom: 0;*/
 }
-
-
 .zonesHeader{
-    height: 50px;
+    height: 40px;
     display: flex;
     /* background: lightblue; */
     align-items: end;
@@ -46,17 +55,28 @@ footer{
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 25%;
-    gap: 20px 10px;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    grid-auto-rows: minmax(85px, auto);
+    grid-gap: 1em;
+    padding: 1em;
+}
+
+#plus{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
 }
 
 .myBox {
-    width: 98%;
+    width: 100%;
     height: 100%;
     border: 1px solid cornflowerblue;
     background: aliceblue;
-    margin: 1%;
+    box-sizing: border-box;
     /*border-radius: 7px;*/
 }
 .click{
@@ -158,6 +178,10 @@ footer{
     display: none;
 }
 /* End buttons css*/
+
+.spacer{
+    height: 20px;
+}
 
 .light{
     font-weight: lighter;

@@ -1,5 +1,6 @@
 package application;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,6 +38,49 @@ public class MeterManager {
             return metersList;
         }
 
+    }
+
+    public static Meter addMeter(HttpServletRequest request, ConnectionDB conn, int zId) throws Exception {
+
+
+        String codMed = request.getParameter("codMed");
+
+
+        try(PreparedStatement verifyExists = conn.getConnectX().prepareStatement(ConnectionDB.VERIFY_METER_SQL)){
+            verifyExists.setString(1, codMed);
+
+            ResultSet resultSet = verifyExists.executeQuery();
+            if (resultSet.next()) {
+                throw new Exception("Codigo de Medidor já existe!");
+            }
+        }
+
+
+
+
+
+        String nomeMed = request.getParameter("nomeMed");
+        String supply_by = request.getParameter("supply_by");
+        String codUni = request.getParameter("codUni");
+        int tipoMed = Integer.parseInt(request.getParameter("tipoMed"));
+
+        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.INSERT_METER_SQL)){
+            preparedStatement.setString(1,codMed);
+            preparedStatement.setString(2,nomeMed);
+            preparedStatement.setInt(3, zId);
+            preparedStatement.setString(4,supply_by);
+            preparedStatement.setString(5,codUni);
+            preparedStatement.setInt(6,tipoMed);
+
+            preparedStatement.execute();
+            conn.getConnectX().commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 
     public void  deleteMeter(ConnectionDB conn, int mId){
