@@ -44,7 +44,7 @@
 <head>
 
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/myStyle.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <title>Web App Zones & Meters - Zones</title>
 </head>
@@ -57,23 +57,45 @@
     </div>
 </header>
 
-<div class="zonesHeader">
+<div class="container">
+    <div class="zonesHeader">
+        <h2>Zones</h2>
+    </div>
+    <div class="grid">
+        <% for (Zone z : zones) {%>
+        <div class="box">
+            <div class="zoneWrapper" data-zid="<%=z.getId()%>">
+                <div class="boxHeader">
+                    <p><%=StringEscapeUtils.escapeHtml4(z.getNome())%>
+                    </p>
+                    <div class="leftBtn">
+                        <button class="button" data-link = "ZoneForm.jsp?zId=<%=z.getId()%>">Editar</button>
+                        <button class="button" value="">Eliminar</button>
+                    </div>
+                </div>
+        </div>
+        </div>
+        <%}%>
+    </div>
+</div>
+
+<%--<div class="zonesHeader">
     <h2>Zones</h2>
 </div>
 
-<%--<div class="master">--%>
+&lt;%&ndash;<div class="master">&ndash;%&gt;
 <div class="main grid">
     <div class="mybox click ">
-        <a href="ZoneForm.jsp" id="plus">
+        <a href="ZoneForm.jsp?zId=-1" id="plus">
             <p class="light">+</p>
         </a>
     </div>
 
     <% if (hasError) { %>
 
-    <%--    ADICIONAR POP-UP --%>
+    &lt;%&ndash;    ADICIONAR POP-UP &ndash;%&gt;
     <p>Something went wrong</p>
-    <%--    ADICIONAR POP-UP  --%>
+    &lt;%&ndash;    ADICIONAR POP-UP  &ndash;%&gt;
 
     <% }%>
 
@@ -112,8 +134,8 @@
         </div>
     </div>
     <%}%>
-    <%--    <div class="spacer"></div>--%>
-</div>
+        <div class="spacer"></div>
+</div>--%>
 <%--</div>--%>
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/plugins.js"></script>

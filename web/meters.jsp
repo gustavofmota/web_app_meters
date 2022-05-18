@@ -17,7 +17,7 @@
 
     boolean hasError = request.getParameter("hasError").equals(Boolean.TRUE.toString());
 
-    if(request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
+    if (request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
 
         Meter meter = MeterManager.addMeter(request, conn, zId);
         hasError = meter == null;
@@ -45,61 +45,63 @@
     </div>
 </header>
 
-<div class="zonesHeader">
+<div class="metersHeader">
     <h2>Meters</h2>
 </div>
 
 <div class="main">
 
-    <a method="post" href="MeterForm.jsp?zId=<%=zId%>">
-        <div class="mybox click ">
+    <div class="mybox click ">
+        <a id="plus" method="post" href="MeterForm.jsp?zId=<%=zId%>">
             <p class="light">+</p>
-        </div>
-    </a>
+        </a>
+    </div>
 
-    <% if (hasError){ %>
+    <% if (hasError) { %>
 
-<%--    ADICIONAR POP-UP --%>
-          <p>Something went wrong</p>
-<%--    ADICIONAR POP-UP  --%>
+    <%--    ADICIONAR POP-UP --%>
+    <p>Something went wrong</p>
+    <%--    ADICIONAR POP-UP  --%>
 
     <% }%>
 
     <%for (Meter m : meters) {%>
     <div class="myBox">
-        <div class="boxHeader">
-            <p><%=m.getNomeMedidor()%>
-            </p>
-            <div class="leftBtn">
-                <button class="button-4" data-link = "ZoneForm.jsp?mId=<%=m.getId()%>" >Editar</button>
-                <button type="submit" class="button-4" name="mId" value="<%=m.getId()%>">Eliminar</button>
+        <div class="zoneWrapper">
+            <div class="boxHeader">
+                <p><%=m.getNomeMedidor()%>
+                </p>
+                <div class="leftBtn">
+                    <button class="button-4" data-link="ZoneForm.jsp?mId=<%=m.getId()%>">Editar</button>
+                    <button type="submit" class="button-4" name="mId" value="<%=m.getId()%>">Eliminar</button>
+                </div>
             </div>
-        </div>
 
-        <div class="boxBody">
+            <div class="boxBody">
 
-            <table>
-                <tr>
-                    <td>Código do Medidor: <a class="light"><%=m.getCodMedidor()%>
-                    </a></td>
-                </tr>
+                <table>
+                    <tr>
+                        <td>Código do Medidor: <a class="light"><%=m.getCodMedidor()%>
+                        </a></td>
+                    </tr>
 
-                <tr>
-                    <td>Supply By: <a class="light"><%=m.getSuply_by()%>
-                    </a></td>
-                </tr>
+                    <tr>
+                        <td>Supply By: <a class="light"><%=m.getSuply_by()%>
+                        </a></td>
+                    </tr>
 
-                <tr>
-                    <td>Código das Unidades: <a class="light"><%=m.getCodUni()%>
-                    </a></td>
-                </tr>
+                    <tr>
+                        <td>Código das Unidades: <a class="light"><%=m.getCodUni()%>
+                        </a></td>
+                    </tr>
 
-                <tr>
-                    <td>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%>
-                    </a></td>
-                </tr>
-            </table>
+                    <tr>
+                        <td>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%>
+                        </a></td>
+                    </tr>
+                </table>
 
+            </div>
         </div>
     </div>
     <%}%>
