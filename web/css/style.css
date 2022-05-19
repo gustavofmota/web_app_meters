@@ -26,7 +26,12 @@ header{
     color: white;
 }
 
-.zonesHeader{
+.right{
+    position:absolute;
+    right: 1%;
+}
+
+.containerHeader{
     height: 40px;
     display: flex;
     /* background: lightblue; */
@@ -43,10 +48,70 @@ header{
     padding: 10px;
 }
 
+#plus{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    opacity: 0.5;
+}
+.click{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
+    color: black;
+}
+
+
 .box {
-    padding: 20px;
     border: 1px solid cornflowerblue;
     background: aliceblue;
+    width: 100%;
+    height: 100%;
+
+}
+.zoneWrapper{
+    margin:15px;
+}
+
+.boxHeader{
+    width: 100%;
+    height: 4vh;
+    position:relative;
+    border-bottom: 1px solid cornflowerblue;
+    display: flex;
+    align-items: center;
+    color: #000;
+    padding-bottom: 1vh;
+}
+
+.name{
+    position: absolute;
+    left: 0;
+}
+
+.leftBtn{
+    position: absolute;
+    right: 0;
+}
+
+
+.boxBody{
+    margin-top: 10px;
+}
+
+.boxWrapper{
+    width: 100%;
+    height: 10vh;
+    display: grid;
+    grid-gap:10px;
+
 }
 
 /* buttons css */
@@ -124,4 +189,9 @@ footer{
     position: static;
     bottom:0;
     left: 0;
+}
+
+.hover div:hover {
+    background: lightskyblue;
+    cursor: pointer;
 }

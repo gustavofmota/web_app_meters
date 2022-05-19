@@ -58,22 +58,46 @@
 </header>
 
 <div class="container">
-    <div class="zonesHeader">
+    <div class="containerHeader">
         <h2>Zones</h2>
     </div>
-    <div class="grid">
+    <div class="grid hover">
+        <div class="box click ">
+            <a href="ZoneForm.jsp?zId=-1" id="plus">
+                <p class="light">+</p>
+            </a>
+        </div>
+
+        <% if (hasError) { %>
+
+        <%--   ADICIONAR POP-UP --%>
+        <p>Something went wrong</p>
+        <%--   ADICIONAR POP-UP --%>
+
+        <% }%>
+
         <% for (Zone z : zones) {%>
         <div class="box">
-            <div class="zoneWrapper" data-zid="<%=z.getId()%>">
+            <div class="zoneWrapper zoneClick" data-zid="<%=z.getId()%>">
                 <div class="boxHeader">
-                    <p><%=StringEscapeUtils.escapeHtml4(z.getNome())%>
-                    </p>
+                    <div class="name">
+                        <p><%=StringEscapeUtils.escapeHtml4(z.getNome())%>
+                        </p>
+                    </div>
                     <div class="leftBtn">
-                        <button class="button" data-link = "ZoneForm.jsp?zId=<%=z.getId()%>">Editar</button>
-                        <button class="button" value="">Eliminar</button>
+                        <button class="button" data-link="ZoneForm.jsp?zId=<%=z.getId()%>">Editar</button>
+                        <button class="button" type="submit" name="zId" value="<%=z.getId()%>">Eliminar</button>
                     </div>
                 </div>
-        </div>
+                <div class="boxBody boxWrapper">
+                    <p>Código Geográfico: <a class="light"><%=StringEscapeUtils.escapeHtml4(z.getCodGeo())%>
+                    </a></p>
+                    <p>Comprimento das Condutas: <a class="light"><%=(z.getTotalCond())%>
+                    </a></p>
+                    <p>População: <a class="light"><%=z.getPopulacao()%>
+                    </a></p>
+                </div>
+            </div>
         </div>
         <%}%>
     </div>

@@ -64,6 +64,8 @@ public class ConnectionDB implements AutoCloseable {
 
     public static final String VERIFY_METER_SQL = "SELECT * FROM meter WHERE codmedidor = ?";
 
+    public static final String SELECT_SPECIFIC_METER_SQL = "SELECT * FROM meter WHERE id=? AND fk_zona=?";
+
     //public static final String SHOW_METER_SQL = "SELECT m.id, m.codmedidor, m.nomemedidor, (SELECT z.nome FROM Zone AS z WHERE z.id = m.fk_zona), (SELECT z.nome FROM Zone AS z WHERE z.id = CAST(m.supply_by AS INT)), m.coduni, m.tipomedidor FROM Meter AS m" ;
 
     public static final String DELETE_METER_SQL = "DELETE FROM Meter WHERE id = ?";

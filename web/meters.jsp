@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="application.Meter" %>
 <%@ page import="application.*" %>
+<%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
 <%--
   Created by IntelliJ IDEA.
   User: baseform
@@ -32,7 +33,7 @@
 <head>
 
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/myStyle_meters.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <title>Web App Zones & Meters - Meters</title>
 </head>
@@ -45,6 +46,57 @@
     </div>
 </header>
 
+<div class="container">
+    <div class="containerHeader">
+        <h2>Meters</h2>
+    </div>
+    <div class="grid">
+        <div class="box click ">
+            <a id="plus" method="post" href="MeterForm.jsp?zId=<%=zId%>">
+                <p class="light">+</p>
+            </a>
+        </div>
+
+        <% if (hasError) { %>
+
+        <%--   ADICIONAR POP-UP --%>
+        <p>Something went wrong</p>
+        <%--   ADICIONAR POP-UP --%>
+
+        <% }%>
+
+        <%for (Meter m : meters) {%>
+            <div class="box">
+                <div class="zoneWrapper" data-zid="<%=zId%>">
+                    <div class="boxHeader">
+                        <div class="name">
+                            <p><%=StringEscapeUtils.escapeHtml4(m.getNomeMedidor())%></p>
+                        </div>
+                        <div class="leftBtn">
+                            <button class="button" data-link="MeterForm.jsp?mId=<%=m.getId()%>&zId=<%=zId%>">Editar</button>
+                            <button class="button" name="mId" value="<%=m.getId()%>">Eliminar</button>
+                        </div>
+                    </div>
+                    <div class="boxBody boxWrapper">
+                        <p>Código do Medidor: <a class="light"><%=m.getCodMedidor()%></a></p>
+                        <p>Supply By: <a class="light"><%=m.getSuply_by()%></a></p>
+                        <p>Código das Unidades: <a class="light"><%=m.getCodUni()%></a></p>
+                        <p>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%></a></p>
+                    </div>
+                </div>
+            </div>
+        <%}%>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<%--
 <div class="metersHeader">
     <h2>Meters</h2>
 </div>
@@ -59,9 +111,9 @@
 
     <% if (hasError) { %>
 
-    <%--    ADICIONAR POP-UP --%>
+    &lt;%&ndash;    ADICIONAR POP-UP &ndash;%&gt;
     <p>Something went wrong</p>
-    <%--    ADICIONAR POP-UP  --%>
+    &lt;%&ndash;    ADICIONAR POP-UP  &ndash;%&gt;
 
     <% }%>
 
@@ -106,6 +158,7 @@
     </div>
     <%}%>
 </div>
+--%>
 
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/plugins.js"></script>

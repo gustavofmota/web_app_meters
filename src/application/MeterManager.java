@@ -40,6 +40,33 @@ public class MeterManager {
 
     }
 
+public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLException{
+
+
+        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SELECT_SPECIFIC_METER_SQL)){
+            preparedStatement.setInt(1, mId);
+            preparedStatement.setInt(2, zId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while (resultSet.next()) {
+                Meter meter = new Meter();
+
+                meter.setId(resultSet.getInt("id"));
+                meter.setCodMedidor(resultSet.getString("codmedidor"));
+                meter.setNomeMedidor(resultSet.getString("nomemedidor"));
+                meter.setFk_zona(resultSet.getInt("fk_zona"));
+                meter.setSuply_by(resultSet.getString("supply_by"));
+                meter.setCodUni(resultSet.getString("coduni"));
+                meter.setTipoMedidor(resultSet.getInt("tipomedidor"));
+
+                return meter;
+            }
+        }
+    return null;
+}
+
     public static Meter addMeter(HttpServletRequest request, ConnectionDB conn, int zId) throws Exception {
 
 

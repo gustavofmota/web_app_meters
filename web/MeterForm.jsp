@@ -13,16 +13,23 @@
 
 <%
     ConnectionDB conn = (ConnectionDB) request.getSession().getAttribute("connection");
-    int zId = Integer.parseInt(request.getParameter("zId"));
+    int zId=-1;
+    int mId=-1;
+    zId = Integer.parseInt(request.getParameter("zId"));
+    if(request.getParameter("mId") != null){
+        mId = Integer.parseInt(request.getParameter("mId"));
+        Meter m = MeterManager.getMeter(conn, zId,mId);
+    }
     String errorMsg = null;
     Meter meter = new Meter();
     boolean verify = false;
     boolean idVer = false;
 
 
-    if(request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
 
+    if(request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
          try{
+
              meter = MeterManager.addMeter(request, conn, zId);
              idVer = true;
          }
@@ -31,11 +38,11 @@
              errorMsg = e.getMessage();
          }
 
-
          /*if(meter==null)
          response.sendRedirect("meters.jsp?zId="+zId+"&hasError=" + (meter==null));*/
     }
 
+        /*;*/
 
 %>
 
@@ -81,10 +88,10 @@
             <input type="hidden" value="<%=zId%>" name="zId">
 
 
-            <input type="hidden" value="<%  %>" name="id">
+            <input type="hidden" value="<% %>" name="id">
 
             <label for="codMed">Código do Medidor: </label>
-            <input type="text" id="codMed" name="codMed">
+            <input type="text" id="codMed" name="codMed" >
 
             <label for="nomeMed">Nome Medidor: </label>
             <input type="text" id="nomeMed" name="nomeMed">
@@ -109,12 +116,6 @@
 <footer>
     <h6>© Developed by Gustavo Mota 2022 ©</h6>
 </footer>
-<%if(idVer){%>
-
-<script>
-    var zId = $('[name="zId"]').val();
-    setTimeout(function() {window.location = "meters.jsp?zId="+zId+"&hasError="});</script>
-<%}%>
 
 </body>
 </html>
