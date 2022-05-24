@@ -1,3 +1,25 @@
+.home{
+    position: absolute;
+    left: 50%;
+    width: 78px;
+    height: 40px;
+    border: 1px white solid;
+    border-radius: 18%;
+    background: #3774b4;
+}
+
+.home > a {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+
 .spacer{
     height: 3%;
 }
@@ -24,5 +46,11 @@ form{
     width: 100%;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px 15px;
+}
+
+.hover a:hover{
+    background: lightskyblue;
+    cursor: pointer;
+    border-radius: 18%;
 }
 

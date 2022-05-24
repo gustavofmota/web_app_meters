@@ -41,16 +41,21 @@ public class ConnectionDB implements AutoCloseable {
 
     //public static final String SHOW_ZONE_SQL = "SELECT * FROM Zone";
 
-    //public static final String SHOW_ZONE_SQL = "SELECT z.id, z.codgeo, z.nome, (SELECT m.nomemedidor FROM Meter AS m WHERE m.id = z.fk_medidorzona), z.totalcond, z.populacao FROM Zone AS z";
+    public static final String SHOW_ZONE_METER_SQL = "SELECT z.id, z.codgeo, z.nome, (SELECT m.nomemedidor FROM Meter AS m WHERE m.id = z.fk_medidorzona), z.totalcond, z.populacao FROM Zone AS z";
+
     public static final String SHOW_ZONE_SQL = "SELECT z.id, z.codgeo, z.nome, z.fk_medidorzona, z.totalcond, z.populacao FROM Zone AS z";
 
-    public static final String DELETE_ZONE_SQL = "DELETE FROM Zone WHERE id = ? RETURNING *";
+    public static final String DELETE_ZONE_SQL = "DELETE FROM Zone WHERE id = ?";
 
-    public static final String UPDATE_ZONE_SQL = "UPDATE Zone SET %s = ? WHERE id = ?";
+    public static final String UPDATE_ZONE_SQL = "UPDATE Zone SET codgeo = ?, nome = ?, totalcond = ?, populacao = ? WHERE id = ?";
+
+    public static final String UPDATE_ZONE_METER = "UPDATE Zone SET fk_medidorzona = (SELECT m.id FROM meter AS m WHERE m.codmedidor = ?) WHERE id = ?";
 
     public static final String SET_MEDIDOR_ZONA_NULL = "UPDATE Zone SET fk_medidorzona = null WHERE fk_medidorzona = ?";
 
     public static final String VERIFY_ZONE_SQL = "SELECT * FROM zone WHERE codgeo = ?";
+
+    public static final String SELECT_SPECIFIC_ZONE_SQL = "SELECT * FROM zone WHERE id=?";
 
 
 
@@ -72,9 +77,9 @@ public class ConnectionDB implements AutoCloseable {
 
     public static final String DELETE_METERS_ZONE = "DELETE FROM Meter WHERE fk_zona = ?";
 
-    public static final String UPDATE_METER_SQL = "UPDATE Meter SET %s = ? WHERE id = ?";
+    public static final String UPDATE_METER_SQL = "UPDATE Meter SET  codmedidor= ?,  nomemedidor= ?,  fk_zona= ?, supply_by = ?, coduni = ?,  tipomedidor = ?  WHERE id = ?";
 
-    public static final String CLEAR_ZONE_METER_SQL = "UPDATE Zone SET fk_medidorzona = null WHERE fk_medidorzona = ?";
+    //public static final String CLEAR_ZONE_METER_SQL = "UPDATE meter SET fk_zona = null WHERE fk_zona = ?";
 
 
 

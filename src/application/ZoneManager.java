@@ -1,7 +1,6 @@
 package application;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,32 +35,30 @@ public class ZoneManager {
         }
     }
 
-    public static Zone addZone(HttpServletRequest request, ConnectionDB conn) throws SQLException {
+    public static Zone addZone(HttpServletRequest request, ConnectionDB conn) throws Exception {
 
         conn.getConnectX().setAutoCommit(false);
         String codGeo = request.getParameter("codGeo");
 
-        try(PreparedStatement verifyExists = conn.getConnectX().prepareStatement(ConnectionDB.VERIFY_ZONE_SQL)){
+        try (PreparedStatement verifyExists = conn.getConnectX().prepareStatement(ConnectionDB.VERIFY_ZONE_SQL)) {
             verifyExists.setString(1, codGeo);
 
             ResultSet resultSet = verifyExists.executeQuery();
-            if (resultSet.next() == true)
-                return null;
+            if (resultSet.next()) {
+                throw new Exception("Codigo geografico já existe!");
+            }
         }
-
-
-
 
 
         String nomeZ = request.getParameter("nomeZ");
         double totalCond = Double.parseDouble(request.getParameter("totalCond"));
         double populacao = Double.parseDouble(request.getParameter("populacao"));
 
-        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.INSERT_ZONE_SQL)){
-            preparedStatement.setString(1,codGeo);
-            preparedStatement.setString(2,nomeZ);
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.INSERT_ZONE_SQL)) {
+            preparedStatement.setString(1, codGeo);
+            preparedStatement.setString(2, nomeZ);
             preparedStatement.setDouble(3, totalCond);
-            preparedStatement.setDouble(4,populacao);
+            preparedStatement.setDouble(4, populacao);
 
             preparedStatement.execute();
             conn.getConnectX().commit();
@@ -71,11 +68,16 @@ public class ZoneManager {
             e.printStackTrace();
         }
 
+        return null;
+    }
 
-        try(PreparedStatement verifyExists = conn.getConnectX().prepareStatement(ConnectionDB.VERIFY_ZONE_SQL)){
-            verifyExists.setString(1, codGeo);
+    public static Zone getZone(ConnectionDB conn, int zId) {
 
-            ResultSet resultSet = verifyExists.executeQuery();
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SELECT_SPECIFIC_ZONE_SQL)) {
+            preparedStatement.setInt(1, zId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
 
             while (resultSet.next()) {
                 Zone zone = new Zone();
@@ -89,13 +91,81 @@ public class ZoneManager {
 
                 return zone;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public void deleteZone(ConnectionDB conn) throws SQLException{
 
+    public static Zone editZone(HttpServletRequest request, ConnectionDB conn, int zId) {
+        String codGeo = request.getParameter("codGeo");
+        String nomeZ = request.getParameter("nomeZ");
+        double totalCond = Double.parseDouble(request.getParameter("totalCond"));
+        double populacao = Double.parseDouble(request.getParameter("populacao"));
+
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_ZONE_SQL)) {
+            preparedStatement.setString(1, codGeo);
+            preparedStatement.setString(2, nomeZ);
+            preparedStatement.setDouble(3, totalCond);
+            preparedStatement.setDouble(4, populacao);
+            preparedStatement.setInt(5, zId);
+
+            preparedStatement.execute();
+            conn.getConnectX().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
+
+
+
+    public static Zone deleteZone(ConnectionDB conn, int zId) throws SQLException {
+        try {
+            try (PreparedStatement deleteFk_MedidorZona = conn.getConnectX().prepareStatement(ConnectionDB.SET_MEDIDOR_ZONA_NULL)) {
+                deleteFk_MedidorZona.setInt(1, zId);
+                deleteFk_MedidorZona.execute();
+            }
+
+            try (PreparedStatement deleteFk_Zona = conn.getConnectX().prepareStatement(ConnectionDB.DELETE_METERS_ZONE)) {
+                deleteFk_Zona.setInt(1, zId);
+                deleteFk_Zona.execute();
+            }
+
+            try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.DELETE_ZONE_SQL)) {
+                preparedStatement.setInt(1, zId);
+                preparedStatement.execute();
+            }
+            conn.getConnectX().commit();
+
+        } catch (SQLException e) {
+            conn.getConnectX().rollback();
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    public static Zone updateMedZona(HttpServletRequest request, ConnectionDB conn, int zId, String mZ) throws SQLException {
+        try{
+            try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_ZONE_METER)){
+                preparedStatement.setString(1, mZ);
+                preparedStatement.setInt(2, zId);
+                preparedStatement.execute();
+                conn.getConnectX().commit();
+            }
+
+
+        } catch (Exception e) {
+            conn.getConnectX().rollback();
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

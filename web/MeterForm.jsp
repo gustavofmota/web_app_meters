@@ -13,13 +13,17 @@
 
 <%
     ConnectionDB conn = (ConnectionDB) request.getSession().getAttribute("connection");
-    int zId=-1;
-    int mId=-1;
-    zId = Integer.parseInt(request.getParameter("zId"));
-    if(request.getParameter("mId") != null){
+    boolean x = false;
+    int mId = -1;
+    int zId = Integer.parseInt(request.getParameter("zId"));
+    Meter m = new Meter();
+
+    if (request.getParameter("mId") != null) {
         mId = Integer.parseInt(request.getParameter("mId"));
-        Meter m = MeterManager.getMeter(conn, zId,mId);
+        m = MeterManager.getMeter(conn, zId, mId);
+        x = true;
     }
+
     String errorMsg = null;
     Meter meter = new Meter();
     boolean verify = false;
@@ -27,22 +31,40 @@
 
 
 
-    if(request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
-         try{
+    /*Adicionar Meter*/
+    if (request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
+        try {
 
-             meter = MeterManager.addMeter(request, conn, zId);
-             idVer = true;
-         }
-         catch (Exception e){
-             verify = true;
-             errorMsg = e.getMessage();
-         }
-
+            meter = MeterManager.addMeter(request, conn, zId);
+            idVer = true;
+            response.sendRedirect("meters.jsp?zId=" + zId + "&hasError=" + (meter != null));
+        } catch (Exception e) {
+            verify = true;
+            errorMsg = e.getMessage();
+        }
          /*if(meter==null)
          response.sendRedirect("meters.jsp?zId="+zId+"&hasError=" + (meter==null));*/
+
+    /*Editar medidor*/
+    } else if (request.getMethod().equals("POST") && request.getParameter("op").equals("edit")) {
+        try {
+            meter = MeterManager.editMeter(request, conn, zId, mId);
+            response.sendRedirect("meters.jsp?zId=" + zId + "&hasError=" + (meter != null));
+        } catch (Exception e) {
+            verify = true;
+            errorMsg = e.getMessage();
+        }
+    }
+    else if (request.getMethod().equals("POST") && request.getParameter("op").equals("delete")) {
+        try{
+             //meter = MeterManager.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-        /*;*/
+
+    /*;*/
 
 %>
 
@@ -59,12 +81,16 @@
 </head>
 <body>
 
-<script src="js/jquery-3.6.0.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/main.js"></script>
 
 <header>
-    <h1>Web App Zones & Meters</h1>
+    <div class="left">
+        <h1>Web App Zones & Meters</h1>
+    </div>
+    <div class="home centerHome btn hover">
+        <a href="index.jsp">
+            <p>Home</p>
+        </a>
+    </div>
     <div class="right">
         <h1>Beta Version</h1>
     </div>
@@ -74,9 +100,14 @@
 
 </div>
 
+<div class="delDiv">
+    <button class="button-4 delete" data-link="meters.jsp?zId=<%=zId%>&mId=<%=mId%>">Eliminar</button>
+</div>
+
 <div>
-    <%if(verify){%>
-        <p>Something went wrong: <%=errorMsg%></p>
+    <%if (verify) {%>
+    <p>Something went wrong: <%=errorMsg%>
+    </p>
     <%}%>
 </div>
 
@@ -84,26 +115,26 @@
 
     <form method="POST">
         <div class="fBody">
-            <input type="hidden" value="create" name="op">
+            <input id="change" type="hidden" <%if(x){%>value="edit"<%}else{%> value="create"<%}%> name="op">
             <input type="hidden" value="<%=zId%>" name="zId">
 
 
-            <input type="hidden" value="<% %>" name="id">
+            <input type="hidden" <%if(x){%>value="<%=m.getId()%>"<%}%> name="id">
 
             <label for="codMed">Código do Medidor: </label>
-            <input type="text" id="codMed" name="codMed" >
+            <input type="text" id="codMed" name="codMed" <%if(x){%>value="<%=m.getCodMedidor()%>"<%}%>>
 
             <label for="nomeMed">Nome Medidor: </label>
-            <input type="text" id="nomeMed" name="nomeMed">
+            <input type="text" id="nomeMed" name="nomeMed" <%if(x){%>value="<%=m.getNomeMedidor()%>"<%}%>>
 
             <label for="supply_by">Supply By: </label>
-            <input type="text" id="supply_by" name="supply_by">
+            <input type="text" id="supply_by" name="supply_by" <%if(x){%>value="<%=m.getSuply_by()%>"<%}%>>
 
             <label for="codUni">Código de Unidades: </label>
-            <input type="text" id="codUni" name="codUni">
+            <input type="text" id="codUni" name="codUni" <%if(x){%>value="<%=m.getCodUni()%>"<%}%>>
 
             <label for="tipoMed">Tipo de Medidor: </label>
-            <input type="text" id="tipoMed" name="tipoMed">
+            <input type="text" id="tipoMed" name="tipoMed" <%if(x){%>value="<%=m.getTipoMedidor()%>"<%}%>>
 
         </div>
 
@@ -116,6 +147,9 @@
 <footer>
     <h6>© Developed by Gustavo Mota 2022 ©</h6>
 </footer>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

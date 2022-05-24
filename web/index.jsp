@@ -31,6 +31,11 @@
 
     boolean hasError = false;
 
+    if(request.getParameter("zId") !=null){
+        int zId = Integer.parseInt(request.getParameter("zId"));
+        ZoneManager.deleteZone(conn,zId);
+    }
+
     if (request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
 
         Zone zone = ZoneManager.addZone(request, conn);
@@ -51,7 +56,14 @@
 <body>
 
 <header>
-    <h1>Web App Zones & Meters</h1>
+    <div class="left">
+        <h1>Web App Zones & Meters</h1>
+    </div>
+    <div class="centerHome btn">
+        <a>
+            <p>Home</p>
+        </a>
+    </div>
     <div class="right">
         <h1>Beta Version</h1>
     </div>
@@ -63,7 +75,7 @@
     </div>
     <div class="grid hover">
         <div class="box click ">
-            <a href="ZoneForm.jsp?zId=-1" id="plus">
+            <a href="ZoneForm.jsp" id="plus">
                 <p class="light">+</p>
             </a>
         </div>
@@ -85,8 +97,7 @@
                         </p>
                     </div>
                     <div class="leftBtn">
-                        <button class="button" data-link="ZoneForm.jsp?zId=<%=z.getId()%>">Editar</button>
-                        <button class="button" type="submit" name="zId" value="<%=z.getId()%>">Eliminar</button>
+                        <button class="button edit" data-link="ZoneForm.jsp?zId=<%=z.getId()%>">Editar</button>
                     </div>
                 </div>
                 <div class="boxBody boxWrapper">

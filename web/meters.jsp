@@ -2,6 +2,8 @@
 <%@ page import="application.Meter" %>
 <%@ page import="application.*" %>
 <%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
+
+
 <%--
   Created by IntelliJ IDEA.
   User: baseform
@@ -15,13 +17,22 @@
 
     int zId = Integer.parseInt(request.getParameter("zId"));
     //int mId = Integer.parseInt(request.getParameter("mId"));
+    String mZ = "";
 
-    boolean hasError = request.getParameter("hasError").equals(Boolean.TRUE.toString());
+    Zone z = ZoneManager.getZone(conn, zId);
+    if (request.getParameter("mId") != null) {
+        int mId = Integer.parseInt(request.getParameter("mId"));
+        MeterManager.deleteMeter(conn, mId);
+    }
 
-    if (request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
+    boolean hasError = false;//request.getParameter("hasError").equals(Boolean.TRUE.toString());
 
-        Meter meter = MeterManager.addMeter(request, conn, zId);
-        hasError = meter == null;
+    if (request.getMethod().equals("POST") && request.getParameter("op").equals("addZoneMeter")) {
+
+        mZ = request.getParameter("medidorZona");
+        Zone zone = ZoneManager.updateMedZona(request, conn, zId, mZ);
+        response.sendRedirect("meters.jsp?zId=" + zId + "&hasError=");
+
     }
 
     List<Meter> meters = MeterManager.getMeters(conn, zId);
@@ -40,7 +51,14 @@
 <body>
 
 <header>
-    <h1>Web App Zones & Meters</h1>
+    <div class="left">
+        <h1>Web App Zones & Meters</h1>
+    </div>
+    <div class="home centerHome btn hover">
+        <a href="index.jsp">
+            <p>Home</p>
+        </a>
+    </div>
     <div class="right">
         <h1>Beta Version</h1>
     </div>
@@ -49,6 +67,17 @@
 <div class="container">
     <div class="containerHeader">
         <h2>Meters</h2>
+        <div>
+            <form class="submitMeter" method="POST">
+                    <input type="hidden" value="<%=zId%>" name="zId">
+                    <input type="hidden" value="addZoneMeter" name="op">
+
+                    <label>Medidor da Zona:</label>
+                    <input type="text" id="medidorZona" name="medidorZona">
+                    <button type="submit" class="button">Confirmar
+                    </button>
+            </form>
+        </div>
     </div>
     <div class="grid">
         <div class="box click ">
@@ -66,34 +95,33 @@
         <% }%>
 
         <%for (Meter m : meters) {%>
-            <div class="box">
-                <div class="zoneWrapper" data-zid="<%=zId%>">
-                    <div class="boxHeader">
-                        <div class="name">
-                            <p><%=StringEscapeUtils.escapeHtml4(m.getNomeMedidor())%></p>
-                        </div>
-                        <div class="leftBtn">
-                            <button class="button" data-link="MeterForm.jsp?mId=<%=m.getId()%>&zId=<%=zId%>">Editar</button>
-                            <button class="button" name="mId" value="<%=m.getId()%>">Eliminar</button>
-                        </div>
+        <div class="box <%=m.getId() == z.getFk_medidorZona() ? "medZon" : ""%>">
+            <div class="zoneWrapper" data-zid="<%=zId%>">
+                <div class="boxHeader">
+                    <div class="name">
+                        <p><%=StringEscapeUtils.escapeHtml4(m.getNomeMedidor())%>
+                        </p>
                     </div>
-                    <div class="boxBody boxWrapper">
-                        <p>Código do Medidor: <a class="light"><%=m.getCodMedidor()%></a></p>
-                        <p>Supply By: <a class="light"><%=m.getSuply_by()%></a></p>
-                        <p>Código das Unidades: <a class="light"><%=m.getCodUni()%></a></p>
-                        <p>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%></a></p>
+                    <div class="leftBtn">
+                        <button class="button edit" data-link="MeterForm.jsp?mId=<%=m.getId()%>&zId=<%=zId%>">Editar
+                        </button>
                     </div>
                 </div>
+                <div class="boxBody boxWrapper">
+                    <p>Código do Medidor: <a class="light"><%=m.getCodMedidor()%>
+                    </a></p>
+                    <p>Supply By: <a class="light"><%=m.getSuply_by()%>
+                    </a></p>
+                    <p>Código das Unidades: <a class="light"><%=m.getCodUni()%>
+                    </a></p>
+                    <p>Tipo de Medidor: <a class="light"><%=m.getTipoMedidor()%>
+                    </a></p>
+                </div>
             </div>
+        </div>
         <%}%>
     </div>
 </div>
-
-
-
-
-
-
 
 
 <%--

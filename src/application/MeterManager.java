@@ -63,6 +63,8 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
 
                 return meter;
             }
+        }catch (SQLException e) {
+         e.printStackTrace();
         }
     return null;
 }
@@ -110,8 +112,54 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
         return null;
     }
 
-    public void  deleteMeter(ConnectionDB conn, int mId){
+    public static Meter editMeter(HttpServletRequest request, ConnectionDB conn, int zId, int mId) {
+        String codMed = request.getParameter("codMed");
+        String nomeMed = request.getParameter("nomeMed");
+        String supply_by = request.getParameter("supply_by");
+        String codUni = request.getParameter("codUni");
+        int tipoMed = Integer.parseInt(request.getParameter("tipoMed"));
 
+        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_METER_SQL)){
+            preparedStatement.setString(1,codMed);
+            preparedStatement.setString(2,nomeMed);
+            preparedStatement.setInt(3, zId);
+            preparedStatement.setString(4,supply_by);
+            preparedStatement.setString(5,codUni);
+            preparedStatement.setInt(6,tipoMed);
+            preparedStatement.setInt(7,mId);
+
+            preparedStatement.execute();
+            conn.getConnectX().commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
+    public static Meter deleteMeter(ConnectionDB conn, int mId) throws SQLException {
+        try {
+            try (PreparedStatement deleteFk_MedidorZona = conn.getConnectX().prepareStatement(ConnectionDB.SET_MEDIDOR_ZONA_NULL)) {
+                deleteFk_MedidorZona.setInt(1, mId);
+                deleteFk_MedidorZona.execute();
+            }
+
+            try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.DELETE_METER_SQL)) {
+                preparedStatement.setInt(1, mId);
+                preparedStatement.execute();
+            }
+            conn.getConnectX().commit();
+
+        } catch (SQLException e) {
+            conn.getConnectX().rollback();
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 
 
