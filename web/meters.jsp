@@ -60,24 +60,13 @@
         </a>
     </div>
     <div class="right">
-        <h1>Beta Version</h1>
+        <h1>Sigma Version</h1>
     </div>
 </header>
 
 <div class="container">
     <div class="containerHeader">
         <h2>Meters</h2>
-        <div>
-            <form class="submitMeter" method="POST">
-                    <input type="hidden" value="<%=zId%>" name="zId">
-                    <input type="hidden" value="addZoneMeter" name="op">
-
-                    <label>Medidor da Zona:</label>
-                    <input type="text" id="medidorZona" name="medidorZona">
-                    <button type="submit" class="button">Confirmar
-                    </button>
-            </form>
-        </div>
     </div>
     <div class="grid">
         <div class="box click ">
@@ -94,14 +83,22 @@
 
         <% }%>
 
-        <%for (Meter m : meters) {%>
-        <div class="box <%=m.getId() == z.getFk_medidorZona() ? "medZon" : ""%>">
+        <%
+            for (Meter m : meters) {
+                boolean isZoneMeter = m.getId() == z.getFk_medidorZona();
+
+        %>
+        <div class="box <%=isZoneMeter ? "medZon" : ""%>">
             <div class="zoneWrapper" data-zid="<%=zId%>">
                 <div class="boxHeader">
                     <div class="name">
                         <p><%=StringEscapeUtils.escapeHtml4(m.getNomeMedidor())%>
                         </p>
                     </div>
+
+                    <%if (isZoneMeter) {%>
+
+                    <% }%>
                     <div class="leftBtn">
                         <button class="button edit" data-link="MeterForm.jsp?mId=<%=m.getId()%>&zId=<%=zId%>">Editar
                         </button>

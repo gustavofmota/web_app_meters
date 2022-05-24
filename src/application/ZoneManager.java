@@ -18,6 +18,7 @@ public class ZoneManager {
 
             ArrayList<Zone> zonesList = new ArrayList<>();
 
+
             while (resultSet.next()) {
                 Zone zone = new Zone();
 
@@ -54,6 +55,18 @@ public class ZoneManager {
         double totalCond = Double.parseDouble(request.getParameter("totalCond"));
         double populacao = Double.parseDouble(request.getParameter("populacao"));
 
+        if (codGeo.equals(""))
+            codGeo = null;
+
+        if (nomeZ.equals(""))
+            nomeZ = null;
+
+        if (totalCond < 0)
+            totalCond = 0;
+
+        if (populacao < 0)
+            populacao = 0;
+
         try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.INSERT_ZONE_SQL)) {
             preparedStatement.setString(1, codGeo);
             preparedStatement.setString(2, nomeZ);
@@ -71,7 +84,7 @@ public class ZoneManager {
         return null;
     }
 
-    public static Zone getZone(ConnectionDB conn, int zId) {
+    public static Zone getZone(ConnectionDB conn, int zId) throws SQLException {
 
         try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SELECT_SPECIFIC_ZONE_SQL)) {
             preparedStatement.setInt(1, zId);
@@ -92,6 +105,7 @@ public class ZoneManager {
                 return zone;
             }
         } catch (SQLException e) {
+            conn.getConnectX().rollback();
             e.printStackTrace();
         }
 
@@ -99,11 +113,20 @@ public class ZoneManager {
     }
 
 
-    public static Zone editZone(HttpServletRequest request, ConnectionDB conn, int zId) {
+    public static Zone editZone(HttpServletRequest request, ConnectionDB conn, int zId) throws SQLException {
         String codGeo = request.getParameter("codGeo");
         String nomeZ = request.getParameter("nomeZ");
+        String medidorZona = request.getParameter("medidorZona");
         double totalCond = Double.parseDouble(request.getParameter("totalCond"));
         double populacao = Double.parseDouble(request.getParameter("populacao"));
+
+
+        try{
+            updateMedZona(request,conn,zId,medidorZona);
+        } catch (SQLException e) {
+            conn.getConnectX().rollback();
+            e.printStackTrace();
+        }
 
         try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_ZONE_SQL)) {
             preparedStatement.setString(1, codGeo);
@@ -115,6 +138,7 @@ public class ZoneManager {
             preparedStatement.execute();
             conn.getConnectX().commit();
         } catch (SQLException e) {
+            conn.getConnectX().rollback();
             e.printStackTrace();
         }
 
@@ -152,6 +176,9 @@ public class ZoneManager {
     }
 
     public static Zone updateMedZona(HttpServletRequest request, ConnectionDB conn, int zId, String mZ) throws SQLException {
+        if(mZ.equals(""))
+            mZ=null;
+
         try{
             try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_ZONE_METER)){
                 preparedStatement.setString(1, mZ);

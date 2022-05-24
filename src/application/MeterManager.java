@@ -1,5 +1,6 @@
 package application;
 
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,10 +10,10 @@ import java.util.List;
 
 public class MeterManager {
 
-    public static List<Meter> getMeters(ConnectionDB conn, int zId) throws SQLException{
+    public static List<Meter> getMeters(ConnectionDB conn, int zId) throws SQLException {
 
 
-        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SHOW_METER_SQL)){
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SHOW_METER_SQL)) {
             preparedStatement.setInt(1, zId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -40,10 +41,10 @@ public class MeterManager {
 
     }
 
-public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLException{
+    public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLException {
 
 
-        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SELECT_SPECIFIC_METER_SQL)){
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.SELECT_SPECIFIC_METER_SQL)) {
             preparedStatement.setInt(1, mId);
             preparedStatement.setInt(2, zId);
 
@@ -63,11 +64,11 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
 
                 return meter;
             }
-        }catch (SQLException e) {
-         e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    return null;
-}
+        return null;
+    }
 
     public static Meter addMeter(HttpServletRequest request, ConnectionDB conn, int zId) throws Exception {
 
@@ -75,7 +76,7 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
         String codMed = request.getParameter("codMed");
 
 
-        try(PreparedStatement verifyExists = conn.getConnectX().prepareStatement(ConnectionDB.VERIFY_METER_SQL)){
+        try (PreparedStatement verifyExists = conn.getConnectX().prepareStatement(ConnectionDB.VERIFY_METER_SQL)) {
             verifyExists.setString(1, codMed);
 
             ResultSet resultSet = verifyExists.executeQuery();
@@ -85,26 +86,40 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
         }
 
 
-
-
-
         String nomeMed = request.getParameter("nomeMed");
         String supply_by = request.getParameter("supply_by");
         String codUni = request.getParameter("codUni");
         int tipoMed = Integer.parseInt(request.getParameter("tipoMed"));
 
-        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.INSERT_METER_SQL)){
-            preparedStatement.setString(1,codMed);
-            preparedStatement.setString(2,nomeMed);
+        if (codMed.equals(""))
+            codMed = null;
+
+        if (nomeMed.equals(""))
+            nomeMed = null;
+
+        if (supply_by.equals(""))
+            supply_by = null;
+
+        if (codUni.equals(""))
+            codUni = null;
+
+        if (tipoMed < 1)
+            tipoMed = 0;
+
+
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.INSERT_METER_SQL)) {
+            preparedStatement.setString(1, codMed);
+            preparedStatement.setString(2, nomeMed);
             preparedStatement.setInt(3, zId);
-            preparedStatement.setString(4,supply_by);
-            preparedStatement.setString(5,codUni);
-            preparedStatement.setInt(6,tipoMed);
+            preparedStatement.setString(4, supply_by);
+            preparedStatement.setString(5, codUni);
+            preparedStatement.setInt(6, tipoMed);
 
             preparedStatement.execute();
             conn.getConnectX().commit();
 
         } catch (SQLException e) {
+            conn.getConnectX().rollback();
             e.printStackTrace();
         }
 
@@ -112,32 +127,48 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
         return null;
     }
 
-    public static Meter editMeter(HttpServletRequest request, ConnectionDB conn, int zId, int mId) {
+    public static Meter editMeter(HttpServletRequest request, ConnectionDB conn, int zId, int mId) throws SQLException {
         String codMed = request.getParameter("codMed");
         String nomeMed = request.getParameter("nomeMed");
         String supply_by = request.getParameter("supply_by");
         String codUni = request.getParameter("codUni");
         int tipoMed = Integer.parseInt(request.getParameter("tipoMed"));
 
-        try(PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_METER_SQL)){
-            preparedStatement.setString(1,codMed);
-            preparedStatement.setString(2,nomeMed);
+        if (codMed.equals(""))
+            codMed = null;
+
+        if (nomeMed.equals(""))
+            nomeMed = null;
+
+        if (supply_by.equals(""))
+            supply_by = null;
+
+        if (codUni.equals(""))
+            codUni = null;
+
+        if (tipoMed < 1)
+            tipoMed = 0;
+
+
+        try (PreparedStatement preparedStatement = conn.getConnectX().prepareStatement(ConnectionDB.UPDATE_METER_SQL)) {
+            preparedStatement.setString(1, codMed);
+            preparedStatement.setString(2, nomeMed);
             preparedStatement.setInt(3, zId);
-            preparedStatement.setString(4,supply_by);
-            preparedStatement.setString(5,codUni);
-            preparedStatement.setInt(6,tipoMed);
-            preparedStatement.setInt(7,mId);
+            preparedStatement.setString(4, supply_by);
+            preparedStatement.setString(5, codUni);
+            preparedStatement.setInt(6, tipoMed);
+            preparedStatement.setInt(7, mId);
 
             preparedStatement.execute();
             conn.getConnectX().commit();
 
         } catch (SQLException e) {
+            conn.getConnectX().rollback();
             e.printStackTrace();
         }
 
         return null;
     }
-
 
 
     public static Meter deleteMeter(ConnectionDB conn, int mId) throws SQLException {
@@ -161,6 +192,5 @@ public static Meter getMeter(ConnectionDB conn, int zId, int mId) throws SQLExce
 
         return null;
     }
-
 
 }
