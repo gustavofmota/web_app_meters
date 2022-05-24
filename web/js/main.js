@@ -18,7 +18,7 @@ $(".zoneClick").on("click", function (e) {
 
 
 
-
+/*
 //url Script
 function getURLParameter(name) {
     return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]);
@@ -34,4 +34,4 @@ function hideURLParams() {
 }
 
 //Run onload, you can do this yourself if you want to do it a different way
-window.onload = hideURLParams;
+window.onload = hideURLParams;*/

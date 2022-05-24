@@ -79,6 +79,7 @@ public class ZoneManager {
         } catch (SQLException e) {
             conn.getConnectX().rollback();
             e.printStackTrace();
+            throw new Exception("Os campos devem estar todos preenchidos!");
         }
 
         return null;

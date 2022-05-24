@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="application.*" %><%--
+<%@ page import="application.*" %>
+<%@ page import="java.util.Objects" %><%--
   Created by IntelliJ IDEA.
   User: baseform
   Date: 5/6/22
@@ -15,7 +16,7 @@
     boolean x = false;
     int zId = -1;
 
-    if (request.getParameter("zId") != null) {
+    if (!"-1".equals(request.getParameter("zId")) && request.getParameter("zId") != null ) {
         zId = Integer.parseInt(request.getParameter("zId"));
         z = ZoneManager.getZone(conn, zId);
         x = true;
@@ -61,14 +62,15 @@
     boolean fkExists = false;
 
     List<Meter> meters = MeterManager.getMeters(conn, zId);
-    if (z.getFk_medidorZona() > 0) {
-        try {
-            m = MeterManager.getMeter(conn, zId, z.getFk_medidorZona());
-            fkExists = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        if (z!=null && z.getFk_medidorZona() > 0) {
+            try {
+                m = MeterManager.getMeter(conn, zId, z.getFk_medidorZona());
+                fkExists = true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
 %>
 
