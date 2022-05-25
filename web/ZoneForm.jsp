@@ -1,7 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="application.*" %>
-<%@ page import="java.util.Objects" %><%--
+<%@ page import="java.util.Objects" %>
+<%@ page import="java.util.Comparator" %><%--
   Created by IntelliJ IDEA.
   User: baseform
   Date: 5/6/22
@@ -16,7 +17,7 @@
     boolean x = false;
     int zId = -1;
 
-    if (!"-1".equals(request.getParameter("zId")) && request.getParameter("zId") != null ) {
+    if (!"-1".equals(request.getParameter("zId")) && request.getParameter("zId") != null) {
         zId = Integer.parseInt(request.getParameter("zId"));
         z = ZoneManager.getZone(conn, zId);
         x = true;
@@ -43,7 +44,8 @@
             response.sendRedirect("index.jsp?hasError=" + (z != null));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            verify = true;
+            errorMsg = e.getMessage();
         }
 
 
@@ -58,19 +60,23 @@
         }
     }
 
-    Meter m = new Meter();
-    boolean fkExists = false;
+    Meter m = null;
 
     List<Meter> meters = MeterManager.getMeters(conn, zId);
-
-        if (z!=null && z.getFk_medidorZona() > 0) {
-            try {
-                m = MeterManager.getMeter(conn, zId, z.getFk_medidorZona());
-                fkExists = true;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    meters.sort(new Comparator<Meter>() {
+        @Override
+        public int compare(Meter o1, Meter o2) {
+            return o1.getNomeMedidor().compareTo(o2.getNomeMedidor());
         }
+    });
+
+    if (z != null && z.getFk_medidorZona() > 0) {
+        try {
+            m = MeterManager.getMeter(conn, zId, z.getFk_medidorZona());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 %>
 
@@ -105,11 +111,6 @@
 
 </div>
 
-<%if(x){%>
-<div class="delDiv">
-    <button class="button-4 delete" data-link="index.jsp?zId=<%=z.getId()%>">Eliminar</button>
-</div>
-<%}%>
 
 <div>
     <%if (verify) {%>
@@ -140,30 +141,24 @@
             <input type="text" id="populacao" name="populacao" <%if(x){%>value="<%=z.getPopulacao()%>"<%}%>>
 
             <%if (x) {%>
-            <label for="medidorZona">Medidor da Zona: </label>
-            <Select id="medidorZona" name="medidorZona">
-                <%if (z.getFk_medidorZona() > 0 && fkExists) {%>
-                <option value="<%=m.getCodMedidor()%>"><%=m.getNomeMedidor()%>
-                </option>
-                <%}%>
-                <option value="">None</option>
-                <%for (Meter me : meters) {%>
-                <%
-                    if (me.getNomeMedidor().equals(m.getNomeMedidor()) && fkExists) {
-                        continue;
-                    } else {
-                %>
-                <option value="<%=me.getCodMedidor()%>"><%=me.getNomeMedidor()%>
-                </option>
-
-                <%}%>
-                <%}%>
-                <%}%>
-            </Select>
+                <label for="medidorZona">Medidor da Zona: </label>
+                <Select id="medidorZona" name="medidorZona">
+                    <option value="">--</option>
+                    <%for (Meter me : meters) {%>
+                        <option <%= m != null && m.getCodMedidor().equals(me.getCodMedidor()) ? "selected" : ""%> value="<%=me.getCodMedidor()%>"><%=me.getNomeMedidor()%></option>
+                    <%}%>
+                </Select>
+            <%}%>
 
         </div>
-
-        <input class="button-4 meterBtn" type="submit" value="Adicionar">
+        <div class="fFooter">
+            <input class="button-4 meterBtn" type="submit" value="Adicionar">
+            <%if (x) {%>
+                <div class="delDiv" >
+                    <button class="button-4 delete" id="delete"  data-link="index.jsp?zId=<%=z.getId()%>">Eliminar</button>
+                </div>
+            <%}%>
+        </div>
     </form>
 
 

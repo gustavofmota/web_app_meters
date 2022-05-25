@@ -12,6 +12,7 @@
 <%@ page import="" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
+<%@ page import="java.util.Comparator" %>
 
 
 <%
@@ -43,6 +44,12 @@
     }
 
     List<Zone> zones = ZoneManager.getZones(conn);
+    zones.sort(new Comparator<Zone>() {
+        @Override
+        public int compare(Zone o1, Zone o2) {
+            return o1.getNome().compareTo(o2.getNome());
+        }
+    });
 %>
 <html>
 

@@ -121,13 +121,14 @@ public class MeterManager {
         } catch (SQLException e) {
             conn.getConnectX().rollback();
             e.printStackTrace();
+            throw new Exception("Os campos devem estar todos preenchidos!");
         }
 
 
         return null;
     }
 
-    public static Meter editMeter(HttpServletRequest request, ConnectionDB conn, int zId, int mId) throws SQLException {
+    public static Meter editMeter(HttpServletRequest request, ConnectionDB conn, int zId, int mId) throws Exception {
         String codMed = request.getParameter("codMed");
         String nomeMed = request.getParameter("nomeMed");
         String supply_by = request.getParameter("supply_by");
@@ -165,6 +166,7 @@ public class MeterManager {
         } catch (SQLException e) {
             conn.getConnectX().rollback();
             e.printStackTrace();
+            throw new Exception("Os campos devem estar todos preenchidos!");
         }
 
         return null;

@@ -34,8 +34,8 @@ header{
     width: 78px;
     height: 40px;
     border: 1px white solid;
-    border-radius: 18%;
-    background: #3774b4;
+    border-radius: 10px;
+    background: cornflowerblue;
 }
 
 .home > a {
@@ -130,8 +130,49 @@ header{
 }
 
 .name{
-    position: absolute;
-    left: 0;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.meterIndicator{
+    border: 1px solid cornflowerblue;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner{
+    background: cornflowerblue;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
+
+.text{
+    background: cornflowerblue;
+    color: white;
+    width: 90px;
+    height: 24px;
+    border: 1px solid cornflowerblue;
+    display: none;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    position:relative;
+    left: 4px;
+    bottom: 18px;
+    border-radius: 5px;
+}
+
+.show{
+    opacity: 1;
 }
 
 .leftBtn{
@@ -230,12 +271,32 @@ footer{
 }
 
 .hover div:hover {
-    background: lightskyblue;
+    background: #8bd3ff;
     cursor: pointer;
 }
 
 .hover a:hover{
-    background: lightskyblue;
+    background: #8bd3ff;
     cursor: pointer;
     border-radius: 18%;
+}
+
+.click:hover {
+    background: lightskyblue;
+}
+
+.meterIndicator:hover{
+    cursor: pointer;
+}
+
+
+.inner:hover .text{
+    display: flex;
+}
+
+
+@media (min-width: 1600px){
+    .grid{
+        grid-template-columns: repeat(3, 1fr);
+    }
 }

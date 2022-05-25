@@ -39,9 +39,10 @@ footer{
     background: cornflowerblue;
     height: 20px;
     font-size: 10px;
-    position: relative;
-    /*position: fixed;
-    bottom: 0;*/
+    /* position: relative; */
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 .metersHeader{
     height: 50px;

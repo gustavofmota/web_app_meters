@@ -114,13 +114,25 @@ public class ZoneManager {
     }
 
 
-    public static Zone editZone(HttpServletRequest request, ConnectionDB conn, int zId) throws SQLException {
+    public static Zone editZone(HttpServletRequest request, ConnectionDB conn, int zId) throws Exception {
         String codGeo = request.getParameter("codGeo");
         String nomeZ = request.getParameter("nomeZ");
         String medidorZona = request.getParameter("medidorZona");
         double totalCond = Double.parseDouble(request.getParameter("totalCond"));
         double populacao = Double.parseDouble(request.getParameter("populacao"));
 
+
+        if (codGeo.equals(""))
+            codGeo = null;
+
+        if (nomeZ.equals(""))
+            nomeZ = null;
+
+        if (totalCond < 0)
+            totalCond = 0;
+
+        if (populacao < 0)
+            populacao = 0;
 
         try{
             updateMedZona(request,conn,zId,medidorZona);
@@ -141,6 +153,7 @@ public class ZoneManager {
         } catch (SQLException e) {
             conn.getConnectX().rollback();
             e.printStackTrace();
+            throw new Exception("Os campos devem estar todos preenchidos!");
         }
 
         return null;
@@ -176,7 +189,7 @@ public class ZoneManager {
         return null;
     }
 
-    public static Zone updateMedZona(HttpServletRequest request, ConnectionDB conn, int zId, String mZ) throws SQLException {
+    public static Zone updateMedZona(HttpServletRequest request, ConnectionDB conn, int zId, String mZ) throws Exception {
         if(mZ.equals(""))
             mZ=null;
 
@@ -192,6 +205,7 @@ public class ZoneManager {
         } catch (Exception e) {
             conn.getConnectX().rollback();
             e.printStackTrace();
+
         }
 
         return null;

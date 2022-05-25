@@ -2,6 +2,7 @@
 <%@ page import="application.Meter" %>
 <%@ page import="application.*" %>
 <%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
+<%@ page import="java.util.Comparator" %>
 
 
 <%--
@@ -36,7 +37,12 @@
     }
 
     List<Meter> meters = MeterManager.getMeters(conn, zId);
-
+    meters.sort(new Comparator<Meter>() {
+        @Override
+        public int compare(Meter o1, Meter o2) {
+            return o1.getNomeMedidor().compareTo(o2.getNomeMedidor());
+        }
+    });
 %>
 
 <html>
@@ -69,7 +75,7 @@
         <h2>Meters</h2>
     </div>
     <div class="grid">
-        <div class="box click ">
+        <div class="box click">
             <a id="plus" method="post" href="MeterForm.jsp?zId=<%=zId%>">
                 <p class="light">+</p>
             </a>
@@ -88,17 +94,24 @@
                 boolean isZoneMeter = m.getId() == z.getFk_medidorZona();
 
         %>
-        <div class="box <%=isZoneMeter ? "medZon" : ""%>">
+        <div class="box <%--<%=isZoneMeter ? "medZon" : ""%>--%>">
             <div class="zoneWrapper" data-zid="<%=zId%>">
                 <div class="boxHeader">
                     <div class="name">
                         <p><%=StringEscapeUtils.escapeHtml4(m.getNomeMedidor())%>
                         </p>
+
+                        <%if (isZoneMeter) {%>
+                        <div class="meterIndicator">
+                            <div class="inner">
+                                <div class="text" id="#addShow">
+                                    <p>Zone Meter</p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }%>
                     </div>
 
-                    <%if (isZoneMeter) {%>
-
-                    <% }%>
                     <div class="leftBtn">
                         <button class="button edit" data-link="MeterForm.jsp?mId=<%=m.getId()%>&zId=<%=zId%>">Editar
                         </button>

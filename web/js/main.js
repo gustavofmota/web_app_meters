@@ -8,13 +8,16 @@ $(".edit").on('click', function(e){
 
 $(".delete").on('click', function(e){
     e.preventDefault();
-    window.location.href=this.dataset.link;
+    if(confirm("Tem a certeza que quer eliminar?")){
+        window.location.href=this.dataset.link;
+    }
 });
 
 $(".zoneClick").on("click", function (e) {
     e.preventDefault();
     location.href = "meters.jsp?zId=" + this.dataset.zid + "&hasError=";
 });
+
 
 
 

@@ -100,9 +100,6 @@
 
 </div>
 
-<div class="delDiv">
-    <button class="button-4 delete" data-link="meters.jsp?zId=<%=zId%>&mId=<%=mId%>">Eliminar</button>
-</div>
 
 <div>
     <%if (verify) {%>
@@ -138,7 +135,14 @@
 
         </div>
 
-        <input class="button-4 meterBtn" type="submit" value="Adicionar">
+        <div class="fFooter">
+            <input class="button-4 meterBtn" type="submit" value="Adicionar">
+            <%if (x) {%>
+            <div class="delDiv" >
+                <button class="button-4 delete" id="delete"  data-link="index.jsp?zId=<%=zId%>">Eliminar</button>
+            </div>
+            <%}%>
+        </div>
     </form>
 
 
