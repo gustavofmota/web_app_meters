@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ZoneManager {
 
 
@@ -52,6 +53,7 @@ public class ZoneManager {
 
 
         String nomeZ = request.getParameter("nomeZ");
+
         double totalCond = Double.parseDouble(request.getParameter("totalCond"));
         double populacao = Double.parseDouble(request.getParameter("populacao"));
 

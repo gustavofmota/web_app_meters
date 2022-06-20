@@ -1,15 +1,14 @@
-
-$(".edit").on('click', function(e){
+$(".edit").on('click', function (e) {
     e.stopPropagation();
-    window.location.href=this.dataset.link;
-    $('#change').attr('value','edit');
+    window.location.href = this.dataset.link;
+    $('#change').attr('value', 'edit');
 
 });
 
-$(".delete").on('click', function(e){
+$(".delete").on('click', function (e) {
     e.preventDefault();
-    if(confirm("Tem a certeza que quer eliminar?")){
-        window.location.href=this.dataset.link;
+    if (confirm("Tem a certeza que quer eliminar?")) {
+        window.location.href = this.dataset.link;
     }
 });
 
@@ -17,8 +16,6 @@ $(".zoneClick").on("click", function (e) {
     e.preventDefault();
     location.href = "meters.jsp?zId=" + this.dataset.zid + "&hasError=";
 });
-
-
 
 
 /*

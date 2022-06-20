@@ -30,7 +30,7 @@
     if (request.getMethod().equals("POST") && request.getParameter("op").equals("create")) {
         try {
             z = ZoneManager.addZone(request, conn);
-            response.sendRedirect("index.jsp?hasError=" + (z != null));
+            response.sendRedirect("zones.jsp?hasError=" + (z != null));
         } catch (Exception e) {
             verify = true;
             errorMsg = e.getMessage();
@@ -41,7 +41,7 @@
 
         try {
             z = ZoneManager.editZone(request, conn, zId);
-            response.sendRedirect("index.jsp?hasError=" + (z != null));
+            response.sendRedirect("zones.jsp?hasError=" + (z != null));
 
         } catch (Exception e) {
             verify = true;
@@ -53,7 +53,7 @@
     } else if (request.getMethod().equals("POST") && request.getParameter("op").equals("delete")) {
         try {
             z = ZoneManager.deleteZone(conn, zId);
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("zones.jsp");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,19 +98,18 @@
         <h1>Web App Zones & Meters</h1>
     </div>
     <div class="home centerHome btn hover">
-        <a href="index.jsp">
+        <a href="zones.jsp">
             <p>Home</p>
         </a>
     </div>
     <div class="right">
-        <h1>Beta Version</h1>
+        <h1>Sigma Version</h1>
     </div>
 </header>
 
 <div class="spacer">
 
 </div>
-
 
 <div>
     <%if (verify) {%>
@@ -155,7 +154,7 @@
             <input class="button-4 meterBtn" type="submit" value="Adicionar">
             <%if (x) {%>
                 <div class="delDiv" >
-                    <button class="button-4 delete" id="delete"  data-link="index.jsp?zId=<%=z.getId()%>">Eliminar</button>
+                    <button class="button-4 delete" id="delete"  data-link="zones.jsp?zId=<%=z.getId()%>">Eliminar</button>
                 </div>
             <%}%>
         </div>

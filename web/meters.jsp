@@ -61,7 +61,7 @@
         <h1>Web App Zones & Meters</h1>
     </div>
     <div class="home centerHome btn hover">
-        <a href="index.jsp">
+        <a href="zones.jsp">
             <p>Home</p>
         </a>
     </div>
